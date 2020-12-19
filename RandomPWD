@@ -1,0 +1,47 @@
+
+ 
+Advertisement
+
+Generate Random Passwords
+Monday Dec 14th 2015
+Use this script to generate a random password.
+
+>>Script Language and Platform: Oracle-PL/SQL
+Use this script to generate a random password.
+
+Author: Renan Medeiros
+
+create or replace function gera_passwd return varchar2 is passwd  varchar2(30);
+passw1  varchar2(30);
+passw2  varchar2(30);
+passw3  varchar2(30);
+passw4  varchar2(30);
+zecond  number;
+begin
+   select dbms_random.string('Z', 3),
+          trunc(dbms_random.value(091, 999)),
+          dbms_random.string('Z', 2),
+          trunc(dbms_random.value(07, 87))
+   into   passw1,
+          passw2,
+          passw3,
+          passw4
+   from   dual;
+   dbms_output.put_line('Password: '||passwd);
+   zecond := to_number(to_char(sysdate,'ss'));
+   if   zecond > 60
+   then zecond := zecond - 60;
+   end  if;
+    if   zecond >= 0
+   and  zecond < 16
+   then passwd := passw1||passw2||passw3||passw4;
+   elsif    zecond > 15
+       and  zecond < 31
+       then passwd := passw3||passw2||passw4||passw1;
+       elsif    zecond > 30
+           and  zecond < 46
+           then passwd := passw3||passw1||passw4||passw2;
+           else passwd := passw1||passw2||passw4||passw3;
+   end  if;
+   return(passwd);
+end;
